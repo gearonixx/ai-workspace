@@ -21,7 +21,7 @@ Ctrl+/ command palette, Ctrl+F find, ? help.
 ## Sync with upstream
     git fetch upstream && git merge upstream/master
 
-## Deploy (Vercel project `cnvs`, https://gxcnv.vercel.app)
+## Deploy (Vercel project `cnvs`, main URL https://drw0.vercel.app)
     cd excalidraw-app && npx cross-env VITE_APP_ENABLE_TRACKING=false vite build
     # copy build/ into an empty dir with .vercel/ (project cnvs) + a minimal vercel.json, then:
     npx vercel@latest deploy --prod --yes --scope gearonixx
