@@ -92,7 +92,7 @@ const insertImage = async (api: ExcalidrawImperativeAPI, item: FeedImage) => {
     elements: [...api.getSceneElementsIncludingDeleted(), imageEl],
     captureUpdate: CaptureUpdateAction.IMMEDIATELY,
   });
-  api.setViewport({ target: imageEl, fit: "scale-down", animation: true });
+  api.setViewport({ target: imageEl, fit: "scale-down", animation: false });
 };
 
 // connect to the local feed; reconnect every 5 s while it is down, always

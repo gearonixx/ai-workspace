@@ -1,17 +1,24 @@
-// local mod: move around the canvas with W A S D (smooth while held).
-// Uses physical keys, so it works in any keyboard layout. The keys are taken
-// before the editor sees them, so A/D no longer pick the arrow/diamond tools.
+// local mod: W A S D jump between the images on the canvas.
+//   W / A / S / D       go to the nearest image above / left / below / right
+//                       of the current one and fit it to the screen (instant)
+//   Shift + W A S D     free panning while held (fast)
+// Physical keys, so it works in any keyboard layout. The keys are taken before
+// the editor sees them, so A/D no longer pick the arrow/diamond tools.
 import { useEffect } from "react";
 
 import type { ExcalidrawImperativeAPI } from "@excalidraw/excalidraw/types";
 
-const SPEED = 5000; // screen pixels per second
+const PAN_SPEED = 5000; // screen pixels per second (Shift + WASD)
+
+// [x, y] direction of travel in scene coordinates
 const DIRS: Record<string, [number, number]> = {
-  KeyW: [0, 1],
-  KeyS: [0, -1],
-  KeyA: [1, 0],
-  KeyD: [-1, 0],
+  KeyW: [0, -1],
+  KeyS: [0, 1],
+  KeyA: [-1, 0],
+  KeyD: [1, 0],
 };
+
+type Box = { id: string; cx: number; cy: number };
 
 const isTyping = (target: EventTarget | null) => {
   const el = target as HTMLElement | null;
@@ -24,15 +31,66 @@ const isTyping = (target: EventTarget | null) => {
   );
 };
 
+const viewportCenter = (api: ExcalidrawImperativeAPI) => {
+  const { scrollX, scrollY, zoom, width, height } = api.getAppState();
+  return {
+    x: -scrollX + width / 2 / zoom.value,
+    y: -scrollY + height / 2 / zoom.value,
+  };
+};
+
+const imageBoxes = (api: ExcalidrawImperativeAPI): Box[] =>
+  api
+    .getSceneElements()
+    .filter((el) => el.type === "image" && !el.isDeleted)
+    .map((el) => ({
+      id: el.id,
+      cx: el.x + el.width / 2,
+      cy: el.y + el.height / 2,
+    }));
+
+// the nearest image whose center lies in the pressed direction; distance
+// across the direction counts double, so W/S stay in the same column and
+// A/D in the same row
+const pickNext = (
+  from: { x: number; y: number },
+  dir: [number, number],
+  boxes: Box[],
+  skipId: string | null,
+) => {
+  let best: Box | null = null;
+  let bestScore = Infinity;
+  for (const b of boxes) {
+    if (b.id === skipId) {
+      continue;
+    }
+    const dx = b.cx - from.x;
+    const dy = b.cy - from.y;
+    const along = dx * dir[0] + dy * dir[1];
+    if (along <= 1) {
+      continue;
+    }
+    const across = Math.abs(dx * dir[1] - dy * dir[0]);
+    const score = along + 2 * across;
+    if (score < bestScore) {
+      bestScore = score;
+      best = b;
+    }
+  }
+  return best;
+};
+
 export const useWasdPan = (api: ExcalidrawImperativeAPI | null) => {
   useEffect(() => {
     if (!api) {
       return;
     }
+    let currentId: string | null = null;
+
+    // --- Shift + WASD: free panning while held ----------------------------
     const held = new Set<string>();
     let frame = 0;
     let lastTime = 0;
-
     const tick = (time: number) => {
       if (!held.size) {
         frame = 0;
@@ -48,15 +106,46 @@ export const useWasdPan = (api: ExcalidrawImperativeAPI | null) => {
       });
       if (dx || dy) {
         const { scrollX, scrollY, zoom } = api.getAppState();
-        const step = (SPEED * dt) / zoom.value;
+        const step = (PAN_SPEED * dt) / zoom.value;
+        // moving the view right means scrolling the scene left
         api.updateScene({
           appState: {
-            scrollX: scrollX + dx * step,
-            scrollY: scrollY + dy * step,
+            scrollX: scrollX - dx * step,
+            scrollY: scrollY - dy * step,
           },
         });
       }
       frame = requestAnimationFrame(tick);
+    };
+
+    // --- WASD: jump to the next image --------------------------------------
+    const jump = (code: string) => {
+      const boxes = imageBoxes(api);
+      if (!boxes.length) {
+        return;
+      }
+      const center = viewportCenter(api);
+      const current = boxes.find((b) => b.id === currentId);
+      // start from the image we jumped to last, unless the view moved away
+      const onCurrent =
+        !!current &&
+        Math.hypot(current.cx - center.x, current.cy - center.y) < 50;
+      const from = onCurrent ? { x: current!.cx, y: current!.cy } : center;
+      const next = pickNext(
+        from,
+        DIRS[code],
+        boxes,
+        onCurrent ? currentId : null,
+      );
+      if (!next) {
+        return;
+      }
+      const el = api.getSceneElements().find((e) => e.id === next.id);
+      if (!el) {
+        return;
+      }
+      currentId = next.id;
+      api.setViewport({ target: el, fit: "contain", animation: false });
     };
 
     const onKeyDown = (event: KeyboardEvent) => {
@@ -65,7 +154,6 @@ export const useWasdPan = (api: ExcalidrawImperativeAPI | null) => {
         event.ctrlKey ||
         event.metaKey ||
         event.altKey ||
-        event.shiftKey ||
         isTyping(event.target) ||
         api.getAppState().editingTextElement
       ) {
@@ -73,10 +161,16 @@ export const useWasdPan = (api: ExcalidrawImperativeAPI | null) => {
       }
       event.preventDefault();
       event.stopPropagation();
-      held.add(event.code);
-      if (!frame) {
-        lastTime = 0;
-        frame = requestAnimationFrame(tick);
+      if (event.shiftKey) {
+        held.add(event.code);
+        if (!frame) {
+          lastTime = 0;
+          frame = requestAnimationFrame(tick);
+        }
+        return;
+      }
+      if (!event.repeat) {
+        jump(event.code);
       }
     };
 

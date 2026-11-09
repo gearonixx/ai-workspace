@@ -314,10 +314,14 @@ type AppViewportDependencies = {
   isGestureActive: () => boolean;
 };
 
+// local mod: navigation animations disabled
+const ANIMATE_VIEWPORT = false;
+
 const resolveAnimationDuration = (
   animation: SetViewportOptions["animation"],
 ): number | null => {
-  if (animation === false) {
+  // local mod: no viewport animations at all, every jump is instant
+  if (!ANIMATE_VIEWPORT || animation === false) {
     return null;
   }
   if (animation === true || animation == null) {
