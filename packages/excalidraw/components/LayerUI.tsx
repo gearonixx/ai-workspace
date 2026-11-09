@@ -286,6 +286,10 @@ const LayerUI = ({
               // we want to make sure this doesn't overflow so subtracting the
               // approximate height of hamburgerMenu + footer
               maxHeight: `${appState.height - 166}px`,
+              // local mod: bare color swatches, no card behind them
+              background: "transparent",
+              boxShadow: "none",
+              border: "none",
             }}
             data-viewport-ui="side"
             data-viewport-ui-name="stylesPanel"

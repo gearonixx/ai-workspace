@@ -297,6 +297,9 @@ export default defineConfig(({ mode }) => {
       svgrPlugin(),
       ViteEjsPlugin(),
       VitePWA({
+        // local mod: unregister the service worker so every deploy shows
+        // immediately (no stale cached version)
+        selfDestroying: true,
         registerType: "autoUpdate",
         devOptions: {
           /* set this flag to true to enable in Development mode */
