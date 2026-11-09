@@ -10,6 +10,7 @@ Personal, minimal-UI build of [Excalidraw](https://github.com/excalidraw/excalid
 - No welcome screen, no logo favicon, tab title "ai-workspace", no dev error badge.
 - Right-click menu has one item: "Copy Image" (copy to clipboard as PNG), no shortcut hints.
 - Ctrl + / Ctrl - zoom steps doubled.
+- No rotation handle on selections.
 - Ctrl+Shift+D = reset canvas (Ctrl+Z undoes it). Ctrl+Shift+S = Save to... (upstream).
 
 Tools stay on the keyboard: V select, H hand, R rectangle, D diamond, O ellipse,

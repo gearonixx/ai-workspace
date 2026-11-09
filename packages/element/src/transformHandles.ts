@@ -38,6 +38,9 @@ export type TransformHandleDirection =
   | "sw"
   | "se";
 
+// local mod: hide the round rotation handle
+const SHOW_ROTATION_HANDLE = false;
+
 export type TransformHandleType = TransformHandleDirection | "rotation";
 
 export type TransformHandle = Bounds;
@@ -196,21 +199,23 @@ export const getTransformHandlesFromCoords = (
           cy,
           angle,
         ),
-    rotation: omitSides.rotation
-      ? undefined
-      : generateTransformHandle(
-          x1 + width / 2 - handleWidth / 2,
-          y1 -
-            dashedLineMargin -
-            handleMarginY +
-            centeringOffset -
-            ROTATION_RESIZE_HANDLE_GAP / zoom.value,
-          handleWidth,
-          handleHeight,
-          cx,
-          cy,
-          angle,
-        ),
+    // local mod: no rotation handle above the selection
+    rotation:
+      !SHOW_ROTATION_HANDLE || omitSides.rotation
+        ? undefined
+        : generateTransformHandle(
+            x1 + width / 2 - handleWidth / 2,
+            y1 -
+              dashedLineMargin -
+              handleMarginY +
+              centeringOffset -
+              ROTATION_RESIZE_HANDLE_GAP / zoom.value,
+            handleWidth,
+            handleHeight,
+            cx,
+            cy,
+            angle,
+          ),
   };
 
   // We only want to show height handles (all cardinal directions)  above a certain size
