@@ -44,6 +44,16 @@ import { register } from "./register";
 
 import type { AppState } from "../types";
 
+// local mod: Ctrl+<code> without Shift/Alt (by physical key, any layout)
+const isPlainCtrlKey = (
+  event: KeyboardEvent | React.KeyboardEvent,
+  code: string,
+) =>
+  event.code === code &&
+  event[KEYS.CTRL_OR_CMD] &&
+  !event.shiftKey &&
+  !event.altKey;
+
 // local mod: Ctrl +/- zoom in steps twice as large as upstream
 const KEY_ZOOM_STEP = ZOOM_STEP * 2;
 
@@ -184,9 +194,11 @@ export const actionZoomIn = register({
       </Tooltip>
     );
   },
+  // local mod: Ctrl+S zooms in too
   keyTest: (event) =>
-    (event.code === CODES.EQUAL || event.code === CODES.NUM_ADD) &&
-    (event[KEYS.CTRL_OR_CMD] || event.shiftKey),
+    ((event.code === CODES.EQUAL || event.code === CODES.NUM_ADD) &&
+      (event[KEYS.CTRL_OR_CMD] || event.shiftKey)) ||
+    isPlainCtrlKey(event, "KeyS"),
 });
 
 export const actionZoomOut = register({
@@ -238,9 +250,11 @@ export const actionZoomOut = register({
       </Tooltip>
     );
   },
+  // local mod: Ctrl+A zooms out too
   keyTest: (event) =>
-    (event.code === CODES.MINUS || event.code === CODES.NUM_SUBTRACT) &&
-    (event[KEYS.CTRL_OR_CMD] || event.shiftKey),
+    ((event.code === CODES.MINUS || event.code === CODES.NUM_SUBTRACT) &&
+      (event[KEYS.CTRL_OR_CMD] || event.shiftKey)) ||
+    isPlainCtrlKey(event, "KeyA"),
 });
 
 export const actionResetZoom = register({

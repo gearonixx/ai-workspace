@@ -2,7 +2,7 @@ import { getNonDeletedElements } from "@excalidraw/element";
 import { LinearElementEditor } from "@excalidraw/element";
 import { isLinearElement, isTextElement } from "@excalidraw/element";
 
-import { arrayToMap, KEYS } from "@excalidraw/common";
+import { arrayToMap } from "@excalidraw/common";
 
 import { CaptureUpdateAction } from "@excalidraw/element";
 
@@ -66,5 +66,6 @@ export const actionSelectAll = register({
       captureUpdate: CaptureUpdateAction.IMMEDIATELY,
     };
   },
-  keyTest: (event) => event[KEYS.CTRL_OR_CMD] && event.key === KEYS.A,
+  // local mod: Ctrl+A is zoom out now (see actionZoomOut)
+  keyTest: (_event) => false,
 });

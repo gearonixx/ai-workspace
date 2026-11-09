@@ -142,6 +142,7 @@ import DebugCanvas, {
 } from "./components/DebugCanvas";
 import { useSimulatedCollaborators } from "./debugCollaborators";
 import { useImageFeed } from "./imageFeed";
+import { useWasdPan } from "./wasdPan";
 import { AIComponents } from "./components/AI";
 import { ExcalidrawPlusIframeExport } from "./ExcalidrawPlusIframeExport";
 
@@ -478,6 +479,9 @@ const ExcalidrawWrapper = () => {
 
   // local mod: images saved by Claude Code sessions appear on the canvas
   useImageFeed(excalidrawAPI);
+
+  // local mod: W A S D move around the canvas
+  useWasdPan(excalidrawAPI);
 
   // ---------------------------------------------------------------------------
   // Hoisted loadImages

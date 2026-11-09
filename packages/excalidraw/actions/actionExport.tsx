@@ -321,8 +321,8 @@ export const actionSaveToActiveFile = register({
       onExportInProgress = false;
     }
   },
-  keyTest: (event) =>
-    event.key === KEYS.S && event[KEYS.CTRL_OR_CMD] && !event.shiftKey,
+  // local mod: Ctrl+S is zoom in now (see actionZoomIn)
+  keyTest: (_event) => false,
 });
 
 export const actionSaveFileToDisk = register({
