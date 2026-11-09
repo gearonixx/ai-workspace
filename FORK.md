@@ -7,7 +7,7 @@ Personal, minimal-UI build of [Excalidraw](https://github.com/excalidraw/excalid
 - Style panel: stroke color swatches + stroke width, no headings, no card background, no full color picker button.
 - Service worker self-destroys: every deploy shows at once.
 - Excalidraw+ banner, Share button, encryption badge, zoom / undo / help buttons hidden.
-- No welcome screen, no logo favicon, tab title "workspace", no dev error badge.
+- No welcome screen, no logo favicon, tab title "ai-workspace", no dev error badge.
 - Right-click menu has one item: "Copy Image" (copy to clipboard as PNG), no shortcut hints.
 - Ctrl + / Ctrl - zoom steps doubled.
 - Ctrl+Shift+D = reset canvas (Ctrl+Z undoes it). Ctrl+Shift+S = Save to... (upstream).
