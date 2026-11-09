@@ -9,6 +9,7 @@ Personal, minimal-UI build of [Excalidraw](https://github.com/excalidraw/excalid
 - Excalidraw+ banner, Share button, encryption badge, zoom / undo / help buttons hidden.
 - No welcome screen, no logo favicon, tab title "canvas", no dev error badge.
 - Right-click menu has one item: "Copy Image" (copy to clipboard as PNG), no shortcut hints.
+- Ctrl + / Ctrl - zoom steps doubled.
 - Ctrl+Shift+D = reset canvas (Ctrl+Z undoes it). Ctrl+Shift+S = Save to... (upstream).
 
 Tools stay on the keyboard: V select, H hand, R rectangle, D diamond, O ellipse,
@@ -27,3 +28,11 @@ Ctrl+/ command palette, Ctrl+F find, ? help.
     # copy build/ into an empty dir with .vercel/ (project cnvs) + a minimal vercel.json, then:
     npx vercel@latest deploy --prod --yes --scope gearonixx
     # never leave .env.local (vercel link writes an OIDC token there) in the deploy dir
+
+## Image feed (images from Claude Code sessions appear on the canvas)
+`tools/image-feed/image_feed.py` (user service `canvas-image-feed`, 127.0.0.1:8977 only) watches
+`~/claude-images/*/claude/` and streams new files over SSE. `excalidraw-app/imageFeed.ts` connects from the
+page, inserts each new image below the drawing and moves the view to it. Only images newer than the last
+inserted one; nothing leaves the machine.
+
+    systemctl --user enable --now canvas-image-feed   # unit file: tools/image-feed/canvas-image-feed.service

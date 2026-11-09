@@ -44,6 +44,9 @@ import { register } from "./register";
 
 import type { AppState } from "../types";
 
+// local mod: Ctrl +/- zoom in steps twice as large as upstream
+const KEY_ZOOM_STEP = ZOOM_STEP * 2;
+
 export const actionChangeViewBackgroundColor = register<Partial<AppState>>({
   name: "changeViewBackgroundColor",
   label: "labels.canvasBackground",
@@ -148,7 +151,7 @@ export const actionZoomIn = register({
         {
           viewportX: appState.width / 2 + appState.offsetLeft,
           viewportY: appState.height / 2 + appState.offsetTop,
-          nextZoom: getNormalizedZoom(appState.zoom.value + ZOOM_STEP),
+          nextZoom: getNormalizedZoom(appState.zoom.value + KEY_ZOOM_STEP),
         },
         appState,
       ),
@@ -202,7 +205,7 @@ export const actionZoomOut = register({
         {
           viewportX: appState.width / 2 + appState.offsetLeft,
           viewportY: appState.height / 2 + appState.offsetTop,
-          nextZoom: getNormalizedZoom(appState.zoom.value - ZOOM_STEP),
+          nextZoom: getNormalizedZoom(appState.zoom.value - KEY_ZOOM_STEP),
         },
         appState,
       ),

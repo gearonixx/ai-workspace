@@ -1,0 +1,11 @@
+[Unit]
+Description=canvas: stream new Claude session images to drw0.vercel.app (127.0.0.1:8977)
+
+[Service]
+ExecStart=/usr/bin/python3 -I %h/src/excalidraw/tools/image-feed/image_feed.py
+Restart=always
+RestartSec=3
+Nice=10
+
+[Install]
+WantedBy=default.target

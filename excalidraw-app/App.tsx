@@ -141,6 +141,7 @@ import DebugCanvas, {
   loadSavedDebugState,
 } from "./components/DebugCanvas";
 import { useSimulatedCollaborators } from "./debugCollaborators";
+import { useImageFeed } from "./imageFeed";
 import { AIComponents } from "./components/AI";
 import { ExcalidrawPlusIframeExport } from "./ExcalidrawPlusIframeExport";
 
@@ -474,6 +475,9 @@ const ExcalidrawWrapper = () => {
   // collaborators for exercising avatar/UserList UI without a real
   // collab room
   useSimulatedCollaborators(excalidrawAPI);
+
+  // local mod: images saved by Claude Code sessions appear on the canvas
+  useImageFeed(excalidrawAPI);
 
   // ---------------------------------------------------------------------------
   // Hoisted loadImages
