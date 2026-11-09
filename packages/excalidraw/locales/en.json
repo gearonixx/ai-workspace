@@ -17,7 +17,7 @@
     "moveCanvas": "Move canvas",
     "cut": "Cut",
     "copy": "Copy",
-    "copyAsPng": "Copy to clipboard as PNG",
+    "copyAsPng": "Copy Image",
     "copyAsSvg": "Copy to clipboard as SVG",
     "copyText": "Copy to clipboard as text",
     "copySource": "Copy source to clipboard",

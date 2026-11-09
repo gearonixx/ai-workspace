@@ -585,6 +585,9 @@ const gesture: Gesture = {
   initialScale: null,
 };
 
+// local mod: right-click menu = only "Copy Image"
+const MINIMAL_CONTEXT_MENU = true;
+
 class App extends React.Component<AppProps, AppState> {
   canvas: AppClassProperties["canvas"];
   interactiveCanvas: AppClassProperties["interactiveCanvas"] = null;
@@ -11227,6 +11230,11 @@ class App extends React.Component<AppProps, AppState> {
   private getContextMenuItems = (
     type: "canvas" | "element",
   ): ContextMenuItems => {
+    // local mod: the right-click menu has a single item, "Copy Image" (PNG)
+    if (MINIMAL_CONTEXT_MENU) {
+      return [actionCopyAsPng];
+    }
+
     const options: ContextMenuItems = [];
 
     options.push(actionCopyAsPng, actionCopyAsSvg);
