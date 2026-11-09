@@ -409,7 +409,6 @@ export const actionChangeStrokeColor = register<
     };
   },
   PanelComponent: ({ elements, appState, updateData, app }) => {
-    const { stylesPanelMode } = getStylesPanelInfo(app);
     const target = resolveColorTarget(appState, elements, "strokeColor");
     // a note has no stroke: its "stroke" is the ink of its text and footer
     const label =
