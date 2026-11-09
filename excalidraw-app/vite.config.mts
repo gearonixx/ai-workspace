@@ -395,8 +395,8 @@ export default defineConfig(({ mode }) => {
           maximumFileSizeToCacheInBytes: 2.3 * 1024 ** 2, // 2.3MB
         },
         manifest: {
-          short_name: "ai-workspace",
-          name: "ai-workspace",
+          short_name: "AI-workspace",
+          name: "AI-workspace",
           description:
             "Excalidraw is a whiteboard tool that lets you easily sketch diagrams that have a hand-drawn feel to them.",
           icons: [
