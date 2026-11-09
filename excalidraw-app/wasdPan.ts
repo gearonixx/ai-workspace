@@ -1,32 +1,33 @@
-// local mod: W A S D jump between the images on the canvas.
-//   W / A / S / D       go to the nearest image above / left / below / right
-//                       of the current one and fit it to the screen (instant)
-//   H J K L             free fast panning while held (vim: left/down/up/right)
-//   Shift + W A S D     same free panning
+// local mod: keyboard navigation over the images on the canvas.
+//   H / J / K / L       (vim) go to the nearest image left / below / above /
+//                       right of the current one and fit it to the screen
+//   W A S D             free fast panning while held
+//   Shift + H J K L     same free panning
 // Physical keys, so it works in any keyboard layout. The keys are taken before
-// the editor sees them, so A/D no longer pick the arrow/diamond tools.
+// the editor sees them, so A/D/H/L no longer pick arrow/diamond/hand/line.
 import { useEffect } from "react";
 
 import type { ExcalidrawImperativeAPI } from "@excalidraw/excalidraw/types";
 
-const PAN_SPEED = 5000; // screen pixels per second (Shift + WASD)
+const PAN_SPEED = 5000; // screen pixels per second (WASD)
 // the area shown around an image on a jump, relative to the image size
 const VIEW_MARGIN = 1.5;
 
 // [x, y] direction of travel in scene coordinates
-// vim keys for free panning
+// WASD: free panning
 const PAN_DIRS: Record<string, [number, number]> = {
-  KeyH: [-1, 0],
-  KeyJ: [0, 1],
-  KeyK: [0, -1],
-  KeyL: [1, 0],
-};
-
-const DIRS: Record<string, [number, number]> = {
   KeyW: [0, -1],
   KeyS: [0, 1],
   KeyA: [-1, 0],
   KeyD: [1, 0],
+};
+
+// HJKL (vim): jump between images
+const DIRS: Record<string, [number, number]> = {
+  KeyH: [-1, 0],
+  KeyJ: [0, 1],
+  KeyK: [0, -1],
+  KeyL: [1, 0],
 };
 
 type Box = { id: string; cx: number; cy: number };
@@ -61,8 +62,8 @@ const imageBoxes = (api: ExcalidrawImperativeAPI): Box[] =>
     }));
 
 // the nearest image whose center lies in the pressed direction; distance
-// across the direction counts double, so W/S stay in the same column and
-// A/D in the same row
+// across the direction counts double, so J/K stay in the same column and
+// H/L in the same row
 const pickNext = (
   from: { x: number; y: number },
   dir: [number, number],
@@ -98,7 +99,7 @@ export const useWasdPan = (api: ExcalidrawImperativeAPI | null) => {
     }
     let currentId: string | null = null;
 
-    // --- Shift + WASD: free panning while held ----------------------------
+    // --- WASD / Shift + HJKL: free panning while held ----------------------------
     const held = new Set<string>();
     let frame = 0;
     let lastTime = 0;
@@ -130,7 +131,7 @@ export const useWasdPan = (api: ExcalidrawImperativeAPI | null) => {
       frame = requestAnimationFrame(tick);
     };
 
-    // --- WASD: jump to the next image --------------------------------------
+    // --- HJKL: jump to the next image --------------------------------------
     const jump = (code: string) => {
       const boxes = imageBoxes(api);
       if (!boxes.length) {

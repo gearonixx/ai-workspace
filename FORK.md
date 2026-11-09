@@ -10,7 +10,7 @@ Personal, minimal-UI build of [Excalidraw](https://github.com/excalidraw/excalid
 - No welcome screen, no logo favicon, tab title "AI-workspace", no dev error badge.
 - Right-click menu has one item: "Copy Image" (copy to clipboard as PNG), no shortcut hints.
 - Zoom: Ctrl+S in, Ctrl+A out (also Ctrl + / Ctrl -), x1.5 per press. Select-all and Ctrl+S save are off.
-- W A S D jump to the nearest image up/left/down/right (image ~2/3 of the screen); H J K L (vim) and Shift+WASD = free fast panning (H/L no longer pick hand/line). No navigation animations (A/D no longer pick arrow/diamond).
+- H J K L (vim) jump to the nearest image left/down/up/right (image ~2/3 of the screen); W A S D and Shift+HJKL = free fast panning. No navigation animations (A/D/H/L no longer pick arrow/diamond/hand/line).
 - No rotation handle on selections.
 - Ctrl+Shift+D = reset canvas (Ctrl+Z undoes it). Ctrl+Shift+S = Save to... (upstream).
 
