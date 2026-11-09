@@ -8,7 +8,7 @@ Personal, minimal-UI build of [Excalidraw](https://github.com/excalidraw/excalid
 - Service worker self-destroys: every deploy shows at once.
 - Excalidraw+ banner, Share button, encryption badge, zoom / undo / help buttons hidden.
 - No welcome screen, no logo favicon, tab title "canvas", no dev error badge.
-- Right-click menu has one item: "Copy Image" (copy to clipboard as PNG).
+- Right-click menu has one item: "Copy Image" (copy to clipboard as PNG), no shortcut hints.
 - Ctrl+Shift+D = reset canvas (Ctrl+Z undoes it). Ctrl+Shift+S = Save to... (upstream).
 
 Tools stay on the keyboard: V select, H hand, R rectangle, D diamond, O ellipse,

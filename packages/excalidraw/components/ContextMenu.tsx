@@ -1,7 +1,6 @@
 import clsx from "clsx";
 import React from "react";
 
-import { getShortcutFromShortcutName } from "../actions/shortcuts";
 import { t } from "../i18n";
 
 import { useExcalidrawAppState, useExcalidrawElements } from "./App";
@@ -11,7 +10,6 @@ import { Popover } from "./Popover";
 import "./ContextMenu.scss";
 
 import type { ActionManager } from "../actions/manager";
-import type { ShortcutName } from "../actions/shortcuts";
 import type { Action } from "../actions/types";
 
 import type { TranslationKeys } from "../i18n";
@@ -116,11 +114,7 @@ export const ContextMenu = React.memo(
                   })}
                 >
                   <div className="context-menu-item__label">{label}</div>
-                  <kbd className="context-menu-item__shortcut">
-                    {actionName
-                      ? getShortcutFromShortcutName(actionName as ShortcutName)
-                      : ""}
-                  </kbd>
+                  {/* local mod: no grey shortcut hint next to the item */}
                 </button>
               </li>
             );
