@@ -4,7 +4,7 @@ Personal, minimal-UI build of [Excalidraw](https://github.com/excalidraw/excalid
 
 ## Changes vs upstream
 - Top shapes toolbar, its hint, hamburger menu, sidebar toggle hidden.
-- Style panel shows only the Stroke color.
+- Style panel shows only the stroke colors, no heading.
 - Excalidraw+ banner, Share button, encryption badge, zoom / undo / help buttons hidden.
 - No welcome screen, no logo favicon, tab title "_", no dev error badge.
 - Ctrl+Shift+D = reset canvas (Ctrl+Z undoes it). Ctrl+Shift+S = Save to... (upstream).

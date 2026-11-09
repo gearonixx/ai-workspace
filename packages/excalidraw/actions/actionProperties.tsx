@@ -417,7 +417,7 @@ export const actionChangeStrokeColor = register<
 
     return (
       <>
-        {stylesPanelMode === "full" && <h3 aria-hidden="true">{label}</h3>}
+        {/* local mod: no "Stroke" heading above the colors */}
         <ColorPicker
           topPicks={target.topPicks}
           palette={target.palette}
