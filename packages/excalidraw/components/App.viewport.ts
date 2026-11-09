@@ -314,20 +314,16 @@ type AppViewportDependencies = {
   isGestureActive: () => boolean;
 };
 
-// local mod: navigation animations disabled
-const ANIMATE_VIEWPORT = false;
 
 const resolveAnimationDuration = (
   animation: SetViewportOptions["animation"],
 ): number | null => {
-  // local mod: no viewport animations at all, every jump is instant
-  if (!ANIMATE_VIEWPORT || animation === false) {
-    return null;
-  }
-  if (animation === true || animation == null) {
+  // local mod: navigation is instant unless a caller passes
+  // `animation: true` explicitly (arrow-key jumps between images do)
+  if (animation === true) {
     return DEFAULT_SCROLL_ANIMATION_DURATION;
   }
-  return animation.duration ?? DEFAULT_SCROLL_ANIMATION_DURATION;
+  return null;
 };
 
 /** Eases the viewport from its current position to `target` over `duration`,

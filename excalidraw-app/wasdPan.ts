@@ -1,17 +1,16 @@
 // local mod: keyboard navigation over the images on the canvas.
-//   H / J / K / L       (vim) go to the nearest image left / below / above /
-//                       right of the current one and fit it to the screen
+//   arrow keys          go to the nearest image left / below / above / right
+//                       of the current one and center it, zoom untouched (animated,
+//                       they no longer nudge selected elements)
 //   W A S D             free fast panning while held
-//   Shift + H J K L     same free panning
+//   Shift + arrows      same free panning
 // Physical keys, so it works in any keyboard layout. The keys are taken before
-// the editor sees them, so A/D/H/L no longer pick arrow/diamond/hand/line.
+// the editor sees them, so A/D no longer pick the arrow/diamond tools.
 import { useEffect } from "react";
 
 import type { ExcalidrawImperativeAPI } from "@excalidraw/excalidraw/types";
 
 const PAN_SPEED = 5000; // screen pixels per second (WASD)
-// the area shown around an image on a jump, relative to the image size
-const VIEW_MARGIN = 1.5;
 
 // [x, y] direction of travel in scene coordinates
 // WASD: free panning
@@ -22,12 +21,12 @@ const PAN_DIRS: Record<string, [number, number]> = {
   KeyD: [1, 0],
 };
 
-// HJKL (vim): jump between images
+// arrow keys: jump between images
 const DIRS: Record<string, [number, number]> = {
-  KeyH: [-1, 0],
-  KeyJ: [0, 1],
-  KeyK: [0, -1],
-  KeyL: [1, 0],
+  ArrowLeft: [-1, 0],
+  ArrowDown: [0, 1],
+  ArrowUp: [0, -1],
+  ArrowRight: [1, 0],
 };
 
 type Box = { id: string; cx: number; cy: number };
@@ -62,8 +61,8 @@ const imageBoxes = (api: ExcalidrawImperativeAPI): Box[] =>
     }));
 
 // the nearest image whose center lies in the pressed direction; distance
-// across the direction counts double, so J/K stay in the same column and
-// H/L in the same row
+// across the direction counts double, so up/down stay in the same column and
+// left/right in the same row
 const pickNext = (
   from: { x: number; y: number },
   dir: [number, number],
@@ -98,8 +97,10 @@ export const useWasdPan = (api: ExcalidrawImperativeAPI | null) => {
       return;
     }
     let currentId: string | null = null;
+    // while a jump animation runs the view is still on its way to the image
+    let lastJumpAt = 0;
 
-    // --- WASD / Shift + HJKL: free panning while held ----------------------------
+    // --- WASD / Shift + arrows: free panning while held ----------------------------
     const held = new Set<string>();
     let frame = 0;
     let lastTime = 0;
@@ -131,7 +132,7 @@ export const useWasdPan = (api: ExcalidrawImperativeAPI | null) => {
       frame = requestAnimationFrame(tick);
     };
 
-    // --- HJKL: jump to the next image --------------------------------------
+    // --- arrows: jump to the next image --------------------------------------
     const jump = (code: string) => {
       const boxes = imageBoxes(api);
       if (!boxes.length) {
@@ -142,7 +143,8 @@ export const useWasdPan = (api: ExcalidrawImperativeAPI | null) => {
       // start from the image we jumped to last, unless the view moved away
       const onCurrent =
         !!current &&
-        Math.hypot(current.cx - center.x, current.cy - center.y) < 50;
+        (performance.now() - lastJumpAt < 600 ||
+          Math.hypot(current.cx - center.x, current.cy - center.y) < 50);
       const from = onCurrent ? { x: current!.cx, y: current!.cy } : center;
       const next = pickNext(
         from,
@@ -158,19 +160,12 @@ export const useWasdPan = (api: ExcalidrawImperativeAPI | null) => {
         return;
       }
       currentId = next.id;
-      // fit the image with a margin around it (it takes ~2/3 of the screen),
-      // not edge to edge
-      const w = el.width * VIEW_MARGIN;
-      const h = el.height * VIEW_MARGIN;
+      lastJumpAt = performance.now();
+      // center the image, keep the zoom the user set
       api.setViewport({
-        target: {
-          x: el.x + el.width / 2 - w / 2,
-          y: el.y + el.height / 2 - h / 2,
-          width: w,
-          height: h,
-        },
-        fit: "contain",
-        animation: false,
+        target: el,
+        fit: "none",
+        animation: true,
       });
     };
 
