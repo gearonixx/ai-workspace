@@ -731,7 +731,7 @@ export const actionChangeStrokeWidth = register<StrokeWidthKey>({
   },
   PanelComponent: ({ elements, appState, updateData, app, data }) => (
     <fieldset>
-      <legend>{t("labels.strokeWidth")}</legend>
+      {/* local mod: no "Stroke width" heading */}
       <div className="buttonList">
         <RadioSelection<StrokeWidthKey>
           group="stroke-width"

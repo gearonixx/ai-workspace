@@ -4,7 +4,7 @@ Personal, minimal-UI build of [Excalidraw](https://github.com/excalidraw/excalid
 
 ## Changes vs upstream
 - Top shapes toolbar, its hint, hamburger menu, sidebar toggle hidden.
-- Style panel: only the stroke color swatches, no heading, no card background.
+- Style panel: stroke color swatches + stroke width, no headings, no card background.
 - Service worker self-destroys: every deploy shows at once.
 - Excalidraw+ banner, Share button, encryption badge, zoom / undo / help buttons hidden.
 - No welcome screen, no logo favicon, tab title "canvas", no dev error badge.

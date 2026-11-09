@@ -160,7 +160,8 @@ export const SelectedShapeActions = ({
   return (
     <div className="selected-shape-actions">
       <div>{predicates.strokeColor && renderAction("changeStrokeColor")}</div>
-      {/* local mod: only the stroke color is shown in the style panel */}
+      {/* local mod: only stroke color + stroke width in the style panel */}
+      {predicates.strokeWidth && renderAction("changeStrokeWidth")}
     </div>
   );
 };
