@@ -291,10 +291,8 @@ export default defineConfig(({ mode }) => {
           envVars.VITE_APP_ENABLE_ESLINT === "false"
             ? undefined
             : { lintCommand: 'eslint "./**/*.{js,ts,tsx}"' },
-        overlay: {
-          initialIsOpen: envVars.VITE_APP_COLLAPSE_OVERLAY === "false",
-          badgeStyle: "margin-bottom: 4rem; margin-left: 1rem",
-        },
+        // local mod: no error/warning badge on the canvas in dev
+        overlay: false,
       }),
       svgrPlugin(),
       ViteEjsPlugin(),
