@@ -11,6 +11,9 @@ import Stack from "../Stack";
 import type { ActionManager } from "../../actions/manager";
 import type { UIAppState } from "../../types";
 
+// local mod: hide zoom, undo/redo and help buttons
+const SHOW_FOOTER_BUTTONS = false;
+
 const Footer = ({
   appState,
   actionManager,
@@ -36,27 +39,29 @@ const Footer = ({
     >
       {/* footer-left is not faded out in zen mode: it holds the zoom controls,
           which stay visible (chrome-less). Its children opt in individually. */}
-      {(defaultUIEnabled || (zoomUIEnabled && app.isNavigationEnabled())) && (
-        <div className="layer-ui__wrapper__footer-left zen-mode-transition">
-          <Stack.Col gap={2}>
-            <Section heading="canvasActions">
-              {zoomUIEnabled && app.isNavigationEnabled() && (
-                <ZoomActions renderAction={actionManager.renderAction} />
-              )}
+      {/* local mod: zoom + undo/redo buttons hidden (use Ctrl +/-/0, Ctrl+Z) */}
+      {SHOW_FOOTER_BUTTONS &&
+        (defaultUIEnabled || (zoomUIEnabled && app.isNavigationEnabled())) && (
+          <div className="layer-ui__wrapper__footer-left zen-mode-transition">
+            <Stack.Col gap={2}>
+              <Section heading="canvasActions">
+                {zoomUIEnabled && app.isNavigationEnabled() && (
+                  <ZoomActions renderAction={actionManager.renderAction} />
+                )}
 
-              {defaultUIEnabled && !appState.viewModeEnabled && (
-                <UndoRedoActions
-                  renderAction={actionManager.renderAction}
-                  className={clsx("zen-mode-transition", {
-                    "layer-ui__wrapper__footer-left--transition-bottom":
-                      appState.zenModeEnabled,
-                  })}
-                />
-              )}
-            </Section>
-          </Stack.Col>
-        </div>
-      )}
+                {defaultUIEnabled && !appState.viewModeEnabled && (
+                  <UndoRedoActions
+                    renderAction={actionManager.renderAction}
+                    className={clsx("zen-mode-transition", {
+                      "layer-ui__wrapper__footer-left--transition-bottom":
+                        appState.zenModeEnabled,
+                    })}
+                  />
+                )}
+              </Section>
+            </Stack.Col>
+          </div>
+        )}
       <FooterCenterTunnel.Out />
       {(defaultUIEnabled || renderWelcomeScreen) && (
         <div
@@ -69,7 +74,8 @@ const Footer = ({
         >
           <div style={{ position: "relative" }}>
             {renderWelcomeScreen && <WelcomeScreenHelpHintTunnel.Out />}
-            {defaultUIEnabled && (
+            {/* local mod: help button hidden (open help with ?) */}
+            {SHOW_FOOTER_BUTTONS && defaultUIEnabled && (
               <HelpButton
                 onClick={() => actionManager.executeAction(actionShortcuts)}
               />

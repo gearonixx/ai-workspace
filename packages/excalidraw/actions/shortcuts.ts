@@ -60,7 +60,7 @@ const shortcutMap: Record<ShortcutName, string[]> = {
   toggleTheme: [getShortcutKey("Shift+Alt+D")],
   saveScene: [getShortcutKey("CtrlOrCmd+S")],
   loadScene: [getShortcutKey("CtrlOrCmd+O")],
-  clearCanvas: [getShortcutKey("CtrlOrCmd+Delete")],
+  clearCanvas: [getShortcutKey("CtrlOrCmd+Shift+D")],
   imageExport: [getShortcutKey("CtrlOrCmd+Shift+E")],
   commandPalette: [
     getShortcutKey("CtrlOrCmd+/"),
@@ -108,7 +108,7 @@ const shortcutMap: Record<ShortcutName, string[]> = {
   zoomToFitSelection: [getShortcutKey("Shift+3")],
   zoomToFit: [getShortcutKey("Shift+1")],
   zoomToFitSelectionInViewport: [getShortcutKey("Shift+2")],
-  saveFileToDisk: [getShortcutKey("CtrlOrCmd+S")],
+  saveFileToDisk: [getShortcutKey("CtrlOrCmd+Shift+S")],
   saveToActiveFile: [getShortcutKey("CtrlOrCmd+S")],
   toggleShortcuts: [getShortcutKey("?")],
   searchMenu: [getShortcutKey("CtrlOrCmd+F")],

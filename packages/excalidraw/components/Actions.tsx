@@ -163,55 +163,7 @@ export const SelectedShapeActions = ({
       {predicates.backgroundColor && (
         <div>{renderAction("changeBackgroundColor")}</div>
       )}
-      {predicates.fill && renderAction("changeFillStyle")}
-
-      {predicates.strokeWidth && renderAction("changeStrokeWidth")}
-
-      {predicates.strokeStyle && <>{renderAction("changeStrokeStyle")}</>}
-
-      {predicates.freedrawMode && renderAction("changeFreedrawMode")}
-
-      {predicates.sloppiness && <>{renderAction("changeSloppiness")}</>}
-
-      {predicates.roundness && <>{renderAction("changeRoundness")}</>}
-
-      {predicates.arrowType && <>{renderAction("changeArrowType")}</>}
-
-      {predicates.text && (
-        <>
-          <fieldset>{renderAction("changeFontFamily")}</fieldset>
-          {renderAction("changeFontSize")}
-          {predicates.textAlign && renderAction("changeTextAlign")}
-        </>
-      )}
-
-      {predicates.verticalAlign && renderAction("changeVerticalAlign")}
-      {predicates.arrowheads && <>{renderAction("changeArrowhead")}</>}
-
-      {predicates.opacity && renderAction("changeOpacity")}
-
-      {predicates.layers && <LayersFieldset renderAction={renderAction} />}
-
-      {predicates.align && (
-        <AlignFieldset
-          renderAction={renderAction}
-          showDistribute={predicates.distribute}
-        />
-      )}
-      {predicates.showExtraActions && (
-        <fieldset>
-          <legend>{t("labels.actions")}</legend>
-          <div className="buttonList">
-            {renderAction("duplicateSelection")}
-            {renderAction("deleteSelectedElements")}
-            {renderAction("group")}
-            {renderAction("ungroup")}
-            {predicates.link && renderAction("hyperlink")}
-            {predicates.cropEditor && renderAction("cropEditor")}
-            {predicates.lineEditor && renderAction("toggleLinearEditor")}
-          </div>
-        </fieldset>
-      )}
+      {/* local mod: only colors are shown in the style panel */}
     </div>
   );
 };

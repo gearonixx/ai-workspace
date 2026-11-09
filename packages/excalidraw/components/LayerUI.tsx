@@ -144,6 +144,9 @@ const DefaultOverwriteConfirmDialog = () => {
   );
 };
 
+// local mod: hide the top shapes toolbar (and its hint), menu, sidebar toggle
+const SHOW_SHAPES_TOOLBAR = false;
+
 const LayerUI = ({
   actionManager,
   appState,
@@ -240,7 +243,8 @@ const LayerUI = ({
     <div style={{ position: "relative" }}>
       <div className="excalidraw-ui-top-left">
         {renderTopLeftUI?.(false, appState)}
-        <tunnels.MainMenuTunnel.Out />
+        {/* local mod: hamburger menu hidden, everything is on shortcuts */}
+        {SHOW_SHAPES_TOOLBAR && <tunnels.MainMenuTunnel.Out />}
       </div>
       {renderWelcomeScreen && <tunnels.WelcomeScreenMenuHintTunnel.Out />}
     </div>
@@ -346,7 +350,9 @@ const LayerUI = ({
                 />
               )}
           </Stack.Col>
-          {defaultUIEnabled &&
+          {/* local mod: top shapes toolbar + hint hidden, tools via keyboard */}
+          {SHOW_SHAPES_TOOLBAR &&
+            defaultUIEnabled &&
             !appState.viewModeEnabled &&
             appState.openDialog?.name !== "elementLinkSelector" && (
               <Section heading="shapes" className="shapes-section">
@@ -417,7 +423,9 @@ const LayerUI = ({
               editorInterface.formFactor === "phone",
               appState,
             )}
-            {!appState.viewModeEnabled &&
+            {/* local mod: sidebar toggle button hidden */}
+            {SHOW_SHAPES_TOOLBAR &&
+              !appState.viewModeEnabled &&
               appState.openDialog?.name !== "elementLinkSelector" &&
               // hide button when sidebar docked
               (!isSidebarDocked ||

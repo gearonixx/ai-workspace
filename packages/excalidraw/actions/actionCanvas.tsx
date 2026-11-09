@@ -124,6 +124,12 @@ export const actionClearCanvas = register({
       captureUpdate: CaptureUpdateAction.IMMEDIATELY,
     };
   },
+  // local mod: Ctrl+Shift+D resets the canvas (undo with Ctrl+Z)
+  keyTest: (event) =>
+    event.key.toLowerCase() === KEYS.D &&
+    event.shiftKey &&
+    event[KEYS.CTRL_OR_CMD] &&
+    !event.altKey,
 });
 
 export const actionZoomIn = register({

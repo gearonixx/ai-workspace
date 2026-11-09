@@ -151,6 +151,9 @@ import { AppSidebar } from "./components/AppSidebar";
 
 import type { CollabAPI } from "./collab/Collab";
 
+// local mod: hide Excalidraw+ banner, Share button, footer shield, welcome screen
+const HIDE_TOP_RIGHT_UI = true;
+
 polyfill();
 
 window.EXCALIDRAW_THROTTLE_RENDER = true;
@@ -1001,7 +1004,13 @@ const ExcalidrawWrapper = () => {
         theme={editorTheme}
         onThemeChange={setAppTheme}
         renderTopRightUI={(isMobile) => {
-          if (isMobile || !collabAPI || !isCollabAvailable) {
+          // local mod: no Excalidraw+ banner / Share button in the top right
+          if (
+            HIDE_TOP_RIGHT_UI ||
+            isMobile ||
+            !collabAPI ||
+            !isCollabAvailable
+          ) {
             return null;
           }
 
@@ -1042,10 +1051,13 @@ const ExcalidrawWrapper = () => {
           theme={appTheme}
           refresh={() => forceRefresh((prev) => !prev)}
         />
-        <AppWelcomeScreen
-          onCollabDialogOpen={onCollabDialogOpen}
-          isCollabEnabled={isCollabAvailable}
-        />
+        {/* local mod: no welcome screen (logo + hints) on an empty canvas */}
+        {!HIDE_TOP_RIGHT_UI && (
+          <AppWelcomeScreen
+            onCollabDialogOpen={onCollabDialogOpen}
+            isCollabEnabled={isCollabAvailable}
+          />
+        )}
         <OverwriteConfirmDialog>
           <OverwriteConfirmDialog.Actions.ExportToImage />
           <OverwriteConfirmDialog.Actions.SaveToDisk />
@@ -1066,7 +1078,10 @@ const ExcalidrawWrapper = () => {
             </OverwriteConfirmDialog.Action>
           )}
         </OverwriteConfirmDialog>
-        <AppFooter onChange={() => excalidrawAPI?.refresh()} />
+        {/* local mod: footer badge (encryption shield) hidden */}
+        {!HIDE_TOP_RIGHT_UI && (
+          <AppFooter onChange={() => excalidrawAPI?.refresh()} />
+        )}
         {excalidrawAPI && <AIComponents excalidrawAPI={excalidrawAPI} />}
 
         <TTDDialogTrigger />
