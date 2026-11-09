@@ -20,7 +20,6 @@ import type { ExcalidrawElement, Theme } from "@excalidraw/element/types";
 import { useAtom } from "../../editor-jotai";
 import { t } from "../../i18n";
 import { useApp, useExcalidrawContainer, useStylesPanelMode } from "../App";
-import { ButtonSeparator } from "../ButtonSeparator";
 import { activeEyeDropperAtom } from "../EyeDropper";
 import { PropertiesPopover } from "../PropertiesPopover";
 import { slashIcon, strokeIcon } from "../icons";
@@ -447,55 +446,57 @@ const ColorPickerComponent = ({
             onReset={resetTopPicks}
           />
         )}
-        {!isCompactMode && <ButtonSeparator />}
-        <Popover.Root
-          open={appState.openPopup === type}
-          onOpenChange={(open) => {
-            if (open) {
-              updateData({ openPopup: type });
-            }
-          }}
-        >
-          {/* serves as an active color indicator as well */}
-          <ColorPickerTrigger
-            color={color}
-            label={label}
-            type={type}
-            theme={appState.theme}
-            mode={type === "elementStroke" ? "stroke" : "background"}
-            editingTextElement={!!appState.editingTextElement}
-            onToggle={() => {
-              // atomic switch: if another popup is open, close it first, then open this one next tick
-              if (appState.openPopup === type) {
-                // toggle off on same trigger
-                updateData({ openPopup: null });
-              } else if (appState.openPopup) {
-                updateData({ openPopup: type });
-              } else {
-                // open this one
+        {/* local mod: no separator + big swatch that opens the full picker */}
+        {isCompactMode && (
+          <Popover.Root
+            open={appState.openPopup === type}
+            onOpenChange={(open) => {
+              if (open) {
                 updateData({ openPopup: type });
               }
             }}
-          />
-          {/* popup content */}
-          {appState.openPopup === type && (
-            <ColorPickerPopupContent
-              type={type}
+          >
+            {/* serves as an active color indicator as well */}
+            <ColorPickerTrigger
               color={color}
-              onChange={onChange}
               label={label}
-              elements={elements}
-              palette={palette}
-              excludedColors={excludedColors}
-              updateData={updateData}
-              getOpenPopup={() => openRef.current}
-              appState={appState}
-              onResetTopPicks={
-                customTopPicks?.length ? resetTopPicks : undefined
-              }
+              type={type}
+              theme={appState.theme}
+              mode={type === "elementStroke" ? "stroke" : "background"}
+              editingTextElement={!!appState.editingTextElement}
+              onToggle={() => {
+                // atomic switch: if another popup is open, close it first, then open this one next tick
+                if (appState.openPopup === type) {
+                  // toggle off on same trigger
+                  updateData({ openPopup: null });
+                } else if (appState.openPopup) {
+                  updateData({ openPopup: type });
+                } else {
+                  // open this one
+                  updateData({ openPopup: type });
+                }
+              }}
             />
-          )}
-        </Popover.Root>
+            {/* popup content */}
+            {appState.openPopup === type && (
+              <ColorPickerPopupContent
+                type={type}
+                color={color}
+                onChange={onChange}
+                label={label}
+                elements={elements}
+                palette={palette}
+                excludedColors={excludedColors}
+                updateData={updateData}
+                getOpenPopup={() => openRef.current}
+                appState={appState}
+                onResetTopPicks={
+                  customTopPicks?.length ? resetTopPicks : undefined
+                }
+              />
+            )}
+          </Popover.Root>
+        )}
       </div>
     </ColorPickerDnDContext.Provider>
   );
