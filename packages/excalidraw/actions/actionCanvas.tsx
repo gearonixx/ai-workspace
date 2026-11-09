@@ -3,7 +3,6 @@ import {
   MAX_ZOOM,
   MIN_ZOOM,
   THEME,
-  ZOOM_STEP,
   CODES,
   KEYS,
 } from "@excalidraw/common";
@@ -54,8 +53,9 @@ const isPlainCtrlKey = (
   !event.shiftKey &&
   !event.altKey;
 
-// local mod: Ctrl +/- zoom in steps twice as large as upstream
-const KEY_ZOOM_STEP = ZOOM_STEP * 2;
+// local mod: keyboard zoom multiplies/divides by 1.5 per press (upstream:
+// +-10 % of 100 %, which felt too slow)
+const KEY_ZOOM_FACTOR = 1.5;
 
 export const actionChangeViewBackgroundColor = register<Partial<AppState>>({
   name: "changeViewBackgroundColor",
@@ -161,7 +161,7 @@ export const actionZoomIn = register({
         {
           viewportX: appState.width / 2 + appState.offsetLeft,
           viewportY: appState.height / 2 + appState.offsetTop,
-          nextZoom: getNormalizedZoom(appState.zoom.value + KEY_ZOOM_STEP),
+          nextZoom: getNormalizedZoom(appState.zoom.value * KEY_ZOOM_FACTOR),
         },
         appState,
       ),
@@ -217,7 +217,7 @@ export const actionZoomOut = register({
         {
           viewportX: appState.width / 2 + appState.offsetLeft,
           viewportY: appState.height / 2 + appState.offsetTop,
-          nextZoom: getNormalizedZoom(appState.zoom.value - KEY_ZOOM_STEP),
+          nextZoom: getNormalizedZoom(appState.zoom.value / KEY_ZOOM_FACTOR),
         },
         appState,
       ),

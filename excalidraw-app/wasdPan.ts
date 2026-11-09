@@ -5,7 +5,7 @@ import { useEffect } from "react";
 
 import type { ExcalidrawImperativeAPI } from "@excalidraw/excalidraw/types";
 
-const SPEED = 1000; // screen pixels per second
+const SPEED = 5000; // screen pixels per second
 const DIRS: Record<string, [number, number]> = {
   KeyW: [0, 1],
   KeyS: [0, -1],
